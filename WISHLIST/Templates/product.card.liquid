@@ -1,0 +1,22 @@
+{% comment %}
+  Shopify Wishlist
+  Usage:
+    - Replace the snippet name ('product-card') with your existing product card snippet
+    - Pass the product object as a snippet variable named 'product'
+{% endcomment %}
+
+{%- layout none -%}
+<div class="wishlist__selected hover__card">
+	{%- render 'product-card-list', product: product -%}
+	{%- render 'product-price-listing', product: product -%}
+	{% include 'hover-view-card' %}
+</div>
+	
+
+<style>
+	#wishlist .list-view-item__price-column, 
+	.main-content .shopify-section,
+	.empty-page-content{
+		display: none;
+	}
+</style>

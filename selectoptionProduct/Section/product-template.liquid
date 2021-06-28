@@ -1,0 +1,68 @@
+{% comment%}
+        	Add label product in template news
+        {% endcomment%}
+        
+        {% if template contains 'custom-product-addSelectioption' %}
+
+        <div class="d-flex select_field">
+          <div class="select_field-item">
+          	<p class="line-item-property__field">
+            <label class="ep_block">挽き方</label>
+            <select required id="choose-an-option" name="properties[選択した挽き方]">
+              <option value="極細挽き（エスプレッソ）">極細挽き（エスプレッソ）</option>
+              <option value="中細挽き（ペーパー）">中細挽き（ペーパー）</option>
+              <option value="中挽き（コーヒーメーカー・サイフォン）">中挽き（コーヒーメーカー・サイフォン）</option>
+              <option value="粗挽き（プレス式）">粗挽き（プレス式）</option>
+              <option value="極粗挽き（パーコレーター）">極粗挽き（パーコレーター）</option>
+              <option value="豆のまま">豆のまま</option>
+            </select>
+           </p>
+          </div>
+          <div class="select_field-item">
+          	<p class="line-item-property__field">
+            <label class="ep_block">焙煎度</label>
+            <select required id="choose-an-option02" name="properties[選択した焙煎度">
+              <option value="ミディアム　浅煎り">ミディアム　浅煎り</option>
+              <option value="ハイ　中煎り">ハイ　中煎り</option>
+              <option value="シティー　深煎り">シティー　深煎り</option>
+              <option value="フルシティー">フルシティー</option>
+              <option value="フレンチ">フレンチ</option>
+              <option value="イタリアン">イタリアン</option>
+              <option value="生豆のまま">生豆のまま</option>
+            </select>
+           </p>
+          </div>
+          
+        
+        </div>
+
+        
+          <style>
+            .ep_inline_block {
+              display:inline-block;
+              vertical-align:middle;
+              margin-left:10px;
+            }
+            .ep_block {
+              display:block;
+              margin-top:10px;
+              margin-bottom:2px;
+            }            
+            .d-flex {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            }
+
+            .select_field-item {
+                margin-bottom: 20px;
+                margin-right: 4px;
+            }
+            @media(max-width: 768px){
+              .d-flex{
+              	display: block;
+              }
+            }
+          </style>
+
+        {% endif %}

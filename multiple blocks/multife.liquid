@@ -1,0 +1,150 @@
+<div class="camblem">
+  <div class="cam__bg">
+    {% if section.settings.image-bg != blank %}
+      <img src="{{ section.settings.image-bg | img_url: '' }}" alt="キャンブレムのこだわり">
+    {% endif %}
+  </div>
+  
+    {% if section.settings.title != blank %}
+      <h1 class="text-center">{{ section.settings.title }}</h1>
+    {% endif %}
+  
+</div>
+
+<div class="page-width camblem__section">
+  	<h2 class="text-center">{{ section.settings.titleCamble }}</h2>
+  
+      <div class="row">
+        <div class="col-md-6">
+          <div class="camblem__blog"><img src="{{ section.settings.image-block | img_url: '' }}" alt="キャンブレムのこだわり"></div>
+        </div>
+        <div class="col-md-6">
+          <div class="camblem__body">
+            {% for block in section.blocks %}
+              {% if block.type  == 'block-3'%}
+                <div class="block-3-info">
+                    <h3 class="h4">{{ block.settings.titleH3 }}</h3>
+                    <div class="rte"><p>{{ block.settings.textH3 }}</p></div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+  
+  <div class="camp-product-show">
+    <h1>{{ section.settings.titlebox2 }}</h1>
+    
+    <div class="row">
+      {% for block in section.blocks %}
+        {% if block.type  == 'block-2'%}
+         <div class="col-md-6">
+            <div class="camblem__body">
+              <h3>{{ block.settings.titleProduct }}</h3>
+              <img src="{{ block.settings.blockImg | img_url: '' }}">
+              <div class="camp-product-info">{{ block.settings.productInfo }}</div>
+            </div>
+          </div>
+     	{% endif %}
+      {% endfor %}
+      </div>
+  </div>
+
+</div>
+  
+
+
+
+{% schema %}
+  {
+    "name": "Multiple Blocks",
+    "settings": [
+        {
+          "type": "image_picker",
+          "id": "image-bg",
+          "label": {
+            "ja": "背景"
+          }
+        },
+		    {
+          "type": "text",
+          "id": "title",
+          "label": {
+            "ja": "キャンブレムのこだわり"
+          }
+        },
+		    {
+          "type": "text",
+          "id": "titleCamble",
+          "label": {
+            "ja": "キャンブレムのコーヒーについて"
+          }
+        },
+		    {
+          "type": "image_picker",
+          "id": "image-block",
+          "label": {
+            "ja": "キャンブレムのコーヒー背景"
+          }
+        },
+		    {
+          "type": "text",
+          "id": "titlebox2",
+          "label": {
+            "ja": "商品のご紹介"
+          }
+        }
+      ],
+   	 "blocks":[
+      {
+        "type": "block-1",
+        "name": "Block 1"
+      },
+      {
+        "type": "block-2",
+        "name": "商品のご紹介",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "blockImg",
+            "label": {
+              "ja": "画像"
+            }
+          },
+		      {
+            "type": "text",
+            "id": "titleProduct",
+            "label": {
+              "ja": "商品名"
+            }
+          },
+		      {
+            "type": "richtext",
+            "id": "productInfo",
+            "label": {
+              "ja": "商品インフォメーション"
+            }
+          }
+        ]
+      },
+	  {
+        "type": "block-3",
+        "name": "キャンブレムのコーヒーについて",
+        "settings": [
+          {
+            "type": "text",
+            "id": "titleH3",
+            "label": "Title h3"
+          },
+  		    {
+            "type": "richtext",
+            "id": "textH3",
+            "label": {
+              "en": "Info"
+            }
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

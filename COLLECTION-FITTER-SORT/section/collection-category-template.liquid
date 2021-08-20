@@ -1,0 +1,301 @@
+{% paginate collection.products by section.settings.pagination_limit %}
+  <section class="section page-body">
+    <div class="container">
+
+      <div class="one-whole column">
+        <h1 class="heading">CATEGORY</h1>
+      </div>
+
+      {% if section.settings.collection_breadcrumb %}
+        <div class="breadcrumb one-whole column">
+          <script type="application/ld+json">
+            {
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "item": {
+                    "@id": "{{ shop.url }}",
+                    "name": "{{ 'general.breadcrumbs.home' | t }}"
+                  }
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "item": {
+                    "@id": "/collections/",
+                    "name": "CATEGORY"
+                  }
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "item": {
+                    "@id": "{{ routes.collections_url }}/{% if collection.handle != blank %}{{ collection.handle }}{% else %}all{% endif %}",
+                    "name": "{{ collection.title }}"
+                  }
+                }
+                {% if current_tags %}
+                  {% for tag in current_tags %}
+                    {% unless tag contains 'meta-' %}
+                      ,
+                      {
+                        "@type": "ListItem",
+                        "position": {{ forloop.index | plus: 3 }},
+                        "item": {
+                          "@id": "{{ routes.collections_url }}/{% if collection.handle != blank %}{{ collection.handle }}{% else %}all{% endif %}/{{ tag | handleize }}",
+                          "name": "{{ tag }}"
+                        }
+                      }
+                    {% endunless %}
+                  {% endfor %}
+                {% endif %}
+              ]
+            }
+          </script>
+
+          <a href="{{ shop.url }}" title="{{ shop.name | escape }}"><span>{{ 'general.breadcrumbs.home' | t }}</span></a>
+          <span class="icon-right-arrow"></span>
+          <a href="/collections/all?sort_by=created-descending" title="取り扱いブランド"><span>CATEGORY</span></a>
+          <span class="icon-right-arrow"></span>
+          <a href="{{ collection.url }}" title="{{ collection.title | escape }}"><span>{{ collection.title }}</span></a>
+          {% if current_tags %}
+            {% for tag in current_tags %}
+              <span class="icon-right-arrow"></span>
+              <a href="{{ routes.collections_url }}/{% if collection.handle != blank %}{{ collection.handle }}{% else %}all{% endif %}/{{ tag | handleize }}" title="{{ tag | escape }}"><span>{{ tag }}</span></a>
+            {% endfor %}
+          {% endif %}
+        </div>
+      {% endif %}
+
+      <div class="category-title brand-top-title">
+        {% assign title_splited = collection.title | split: "/" %}
+        <h2 class="item-list-category">
+          <b>{{ title_splited[0] | escape }}</b>
+          <br>{{ title_splited[1] | escape }}
+        </h2>
+      </div>
+      
+      
+	<!--       fitter -->
+      
+      {% if collection.handle != blank and collection.products_count > 0 %}
+      <div class="content-wrapper">
+        <div class="section_select">
+          {% if section.settings.collection_sort %}
+          <div class="filter_wrap hidden-phone">
+            <dl class="item-sort-link">
+              <dt class="item-sort-link__item"><b>並び替え:</b></dt>
+              <dd class="item-sort-link__item">
+                <a
+                   {% if collection.sort_by == 'best-selling' %}
+                   class="active"
+                   {% endif %}
+                   href="{{ request.path  }}?sort_by=best-selling"
+                   >人気順</a></dd>
+              <dd class="item-sort-link__item">
+                <a
+                   {% if collection.sort_by == 'created-descending' %}
+                   class="active"
+                   {% endif %}
+                   href="{{ request.path  }}?sort_by=created-descending"
+                   >新着順</a></dd>
+              <dd class="item-sort-link__item">
+                <a
+                   {% if collection.sort_by == 'price-ascending' %}
+                   class="active"
+                   {% endif %}
+                   href="{{ request.path  }}?sort_by=price-ascending"
+                   >価格が安い順</a></dd>
+              <dd class="item-sort-link__item">
+                <a
+                   {% if collection.sort_by == 'price-descending' %}
+                   class="active"
+                   {% endif %}
+                   href="{{ request.path  }}?sort_by=price-descending"
+                   >価格が高い順</a></dd>
+            </dl>
+          </div>
+          <div class="filter_wrap visible-phone">
+            <label for="sort-by" class="inline">{{ 'collections.sorting.title' | t }}: </label>
+            <select class="sort_by" id="sort-by" data-default-sort="{{ collection.sort_by | default: ''  }}">
+              <option value="">選択してください</option>
+              <option value="best-selling">人気順</option>
+              <option value="created-descending">新着順</option>
+              <option value="price-ascending">価格が安い順</option>
+              <option value="price-descending">価格が高い順</option>
+            </select>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+      
+      
+
+      {% if collection.image %}
+      <div class="brand-top-banner">
+        {% render 'image-element',
+                    image: collection.image,
+        alt: collection.image.alt,
+        stretch_width: true
+        %}
+      </div>
+      {% endif %}
+
+      {% if collection.description != blank %}
+      <div class="container">
+        <div class="one-whole column collection__description">
+          {{ collection.description }}
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="content-wrapper content-wrapper--collection is-flex is-flex-wrap">
+        <div class="has-sidebar-option sidebar-enabled--{{ sidebar }}">
+          <div class="container">
+            {% if collection.products.size == 0 %}
+              <div class="one-whole column text-align-center">
+                <p class="quote">{{ 'collections.general.no_matches' | t }}</p>
+              </div>
+            {% else %}
+              {%- assign products = collection.products -%}
+              {%- assign products_per_row = section.settings.products_per_row -%}
+
+              {% render 'product-loop',
+                      products: products,
+                      products_per_row: products_per_row,
+                      sidebar: sidebar
+              %}
+            {% endif %}
+
+            {% render 'pagination', paginate: paginate %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endpaginate %}
+
+{% schema %}
+  {
+    "name": "Collection banner Wear",
+    "class": "shopify-section--collection-template",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "collection_breadcrumb",
+        "label": "Show breadcrumb links",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "collection_sort",
+        "label": "Show collection filter",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "collection_tags",
+        "label": "Show tag filter",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "products_per_row",
+        "label": "Products per row",
+        "min": 2,
+        "max": 4,
+        "step": 1,
+        "default": 3
+      },
+      {
+        "type": "range",
+        "id": "pagination_limit",
+        "label": "Products per page",
+        "min": 2,
+        "max": 50,
+        "step": 1,
+        "default": 48
+      },
+      {
+        "type": "header",
+        "content": "Sidebar"
+      },
+      {
+        "type": "paragraph",
+        "content": "Create sidebar by adding content blocks."
+      },
+      {
+        "type": "checkbox",
+        "id": "toggle",
+        "label": "Toggle sidebar content",
+        "default": false
+      }
+    ],
+    "blocks": [
+      {
+        "type": "filter_by_collection",
+        "name": "Collection list",
+        "limit": 1
+      },
+      {
+        "type": "menu",
+        "name": "Menu",
+        "settings": [
+          {
+            "type": "link_list",
+            "id": "custom_menu_linklist",
+            "label": "Menu"
+          }
+        ]
+      },
+      {
+        "type": "page",
+        "name": "Page",
+        "settings": [
+          {
+            "type": "page",
+            "id": "content_page",
+            "label": "Page"
+          }
+        ]
+      },
+      {
+        "type": "filter_by_tag",
+        "name": "Tag list",
+        "limit": 1
+      },
+      {
+        "type": "text",
+        "name": "Text",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "Heading"
+          },
+          {
+            "type": "richtext",
+            "id": "text",
+            "label": "Text",
+            "default": "<p>Text area can be used for special announcements or general information.</p>"
+          }
+        ]
+      },
+      {
+        "type": "filter_by_type",
+        "name": "Type list",
+        "limit": 1
+      },
+      {
+        "type": "filter_by_vendor",
+        "name": "Vendor list",
+        "limit": 1
+      }
+    ]
+  }
+{% endschema %}

@@ -1,1 +1,4 @@
 https://shopify.dev/themes/architecture/templates/collection#sorting-products-in-a-collection
+
+
+https://gist.github.com/carolineschnapp/11352987

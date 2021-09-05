@@ -1,0 +1,507 @@
+{% paginate blog.articles by 6 %}
+
+
+
+
+  <div class="blog__heading">
+    {%- assign blog_title = blog.title -%}
+
+    {% if current_tags %}
+      {% capture blog_title %}{{ blog.title | link_to: blog.url }} &mdash; {{ current_tags.first }}{% endcapture %}
+    {% endif %}
+    
+     <div class="head-blog test flex-ns justify-between-ns items-center-ns mt4 mb4 mb3-ns tc tl-ns">
+       <div class="wrap-art">
+          <h2 class="dn-ns page-header__crumbs type-heading-meta mb2"><a href="{{ routes.root_url }}" class="color-inherit">{{ 'general.meta.home' | t }}</a> / {{ blog.title }}</h2>
+         <h1 class="ma0 type-heading-1"><a href="{{ article.url }}"><img class="logo--blog" src="https://cdn.shopify.com/s/files/1/0438/5118/6337/files/tt_k.png?v=1630795771"></a></h1>
+	<!--     All articles show blog index -->
+         
+         {% if  blog_title  == 'All Articles' %}
+         	<p class="font-14">Each week we publish articles on books, artists, seasonal recipes, travel and the stories of our makers and materials.</p>
+         {% endif %}
+           
+       </div>
+    </div>
+    
+	<!--     All articles show blog index -->
+    {% if  blog_title  == 'All Articles' %}
+    	<section class="blog__articles top__three-blog">
+          <div class="wrap-art">
+            <div class="js-slick-blog">
+              {% for article in blog.articles limit: 3 %}
+              <div class="pa1 w-100 pa2-ns w-50-m w-third-l">
+                <article class="blog__article">
+                  {% if article.image %}
+                    <a href="{{ article.url }}" class="{% render 'aspect-ratio-modifier' with aspect_ratio: section.settings.aspect_ratio %}">
+                      {% render 'responsive-image' with
+                        image: article.image,
+                      %}
+                    </a>
+                  {% endif %}
+
+                  <div class="blog__article-content">
+
+                    <div>
+                      <h3 class="blog__article-heading type-heading-2">
+                        <a href="{{ article.url }}">{{ article.title }}</a>
+                      </h3>
+                    </div>
+
+                  </div>
+
+                </article>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </section>
+    {% endif %}
+    
+    
+    
+     {% if template contains 'blog' %}
+        {% assign tag_list = current_tags %}
+      {% else %}
+        {% assign tag_list = article.tags %}
+      {% endif %}
+    
+    
+    <div class="blog-filter">
+      <div class="wrap-art">
+        <ul>
+            <li {% if  blog_title  == 'All Articles' %} class="current"{% endif %}>
+              <a href="{{ blog.url }}">ALL</a>
+            </li>
+          
+          {% for tag in blog.all_tags %}
+            {% if tag_list contains tag %}
+              <li class="current">{{ tag | link_to_tag: tag }}</li>
+            {% else %}
+              <li>{{ tag | link_to_tag: tag }}</li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+        
+        
+      </div>
+    </div>
+   
+    
+    
+    
+    {% if  blog_title  != 'All Articles' %}
+    	<div class="other__header-blog">
+          <h1 class="ma0 type-heading-1">{{ current_tags }}</h1>
+          <p class="font-14">Each week we publish articles on books, artists, seasonal recipes, travel and the stories of our makers and materials.</p>
+    	</div>
+    {% endif %}
+    
+    
+    
+
+   
+
+  </div>
+
+  <div class="blog__container">
+    {% comment %}
+
+    Article Previews
+    ====================
+    {% endcomment %}
+
+    <section class="blog__articles">
+      <div class="wrap-art">
+        <div class="list-art">
+            {% for article in blog.articles %}
+            <div class="pa1 w-100 pa2-ns w-50-m w-third-l">
+              <article class="blog__article">
+                {% if article.image %}
+                  <a href="{{ article.url }}" class="{% render 'aspect-ratio-modifier' with aspect_ratio: section.settings.aspect_ratio %}">
+                    {% render 'responsive-image' with
+                      image: article.image,
+      <!--                 max_width: 520,  -->
+      <!--                 max_height: 750  -->
+                    %}
+                  </a>
+                {% endif %}
+
+                <div class="blog__article-content">
+
+                  <div>
+                    <h3 class="blog__article-heading type-heading-2">
+                      <a href="{{ article.url }}">{{ article.title }}</a>
+                    </h3>
+
+                    <div class="blog__article-excerpt type-body-small">{{ article.excerpt_or_content | strip_html | truncate: 200 }}</div>
+                  </div>
+
+                  {% capture date %}{{ article.published_at | time_tag: format: 'month_day_year' }}{% endcapture %}
+                  <div class="type-heading-meta meta">{{ date }}</div>
+                </div>
+                
+                <div class="list--item">
+                  <div class="article__footer">
+                    <ul>
+                      {% for tag in article.tags %}
+                      <li><a href="{{ blog.url }}/tagged/{{ tag.handle }}">{{ tag }}</a></li>
+                      {% endfor %}
+                    </ul>
+                    <p>{{ article.published_at | date: "%d %b" }}</p>
+                
+                  </div>
+                </div>
+
+              </article>
+            </div>
+            {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <div class="blog__pagination">
+        <div class="wrap-art">
+          {% if paginate.pages > 1 %}
+            {% render 'pagination' with
+              type: 'general.pagination.blog_posts',
+              paginate: paginate
+            %}
+          {% else %}
+            {% render 'pagination' with
+              type: 'general.pagination.blog_posts',
+              display_paginate_item_count_only: true,
+              paginate: paginate
+            %}
+          {% endif %}
+      </div>
+    </div>
+
+  </div>
+{% endpaginate %}
+
+{% schema %}
+  {
+    "name": "Blog pages",
+    "settings": [
+      {
+        "id": "aspect_ratio",
+        "type": "select",
+        "label": "Image aspect ratio",
+        "options": [
+          { "label": "Natural", "value": "natural" },
+          { "label": "Square (1:1)", "value": "square" },
+          { "label": "Landscape (3:2)", "value": "landscape" },
+          { "label": "Portrait (2:3)", "value": "portrait" }
+        ],
+        "default": "square"
+      }
+    ]
+  }
+{% endschema %}
+
+<style>
+  .top__three-blog .blog__article img{
+  
+  }
+  .header__content, .blog__heading, .blog__container{
+  	max-width: 100%;
+  }
+  .footer__container{
+  	max-width: 100%;
+  }
+  .responsive-image__wrapper {
+      max-width: 100% !important;
+  }
+
+  .blog__article img {
+      max-width: 100% !important;
+      width: 100%;
+      height: auto !important;
+      max-height: 660px !important;
+      object-fit: cover;
+      position: relative;
+  }
+  .wrap-art {
+      max-width: 1300px;
+      position: relative;
+      margin: 0 auto;
+      width: 100%;
+  }
+  
+  .list-art .w-third-l {
+      width: 100%;
+      flex: 0 0 calc(100% / 3);
+      padding: 0 20px;
+      margin-bottom: 40px;
+  }
+
+  .list-art {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0 -20px;
+  }
+
+  .list-art .blog__article-content {
+      padding: 10px 0 0 0;
+  }
+
+  .list-art .blog__article-content a {
+/*       font-size: 18px; */
+      display: block;
+      color: #000000 !important;
+  }
+
+  .list-art .blog__article-excerpt {
+      margin-bottom: 0;
+  }
+
+  .list-art .blog__article-content h3 {
+      margin: 0;
+  }
+
+  .list-art .type-heading-meta {
+      display: none;
+  }
+  
+  .blog-filter ul {
+      list-style: none;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      flex-wrap: wrap;
+      margin: 0;
+      border-top: 1px solid #dbdbdb;
+      border-bottom: 1px solid #dbdbdb;
+  }
+
+  .blog-filter ul li {
+      margin-right: 40px;
+  }
+
+  .blog-filter ul li:last-child {
+      margin-right: 0;
+  }
+
+  .blog-filter ul li a {
+      display: flex;
+      padding: 24px 0;
+      position: relative;
+  }
+
+  .blog-filter ul li a:After {content: "";width: 100%;height: 1px;background: #000000;position: absolute;bottom: -1px;left: 0;transition: .3s all !important;opacity: 0;}
+
+  .blog-filter ul li a:hover:after {
+      opacity: 1;
+  }
+  .blog__pagination {
+      text-align: right;
+      margin: 0;
+  }
+  .blog__article .responsive-image__wrapper:before {
+      display: none;
+  }
+  .js-slick-blog .slick-arrow {
+      display: inline-flex;
+      height: 40px;
+      width: 40px;
+      justify-content: center;
+      align-items: center;
+      background: transparent;
+      border: 1px solid #dbdbdb;
+      border-radius: 4px;
+      position: absolute;
+      z-index: 2;
+      top: calc(50% - 20px);
+      left: -50px;
+  }
+
+  .js-slick-blog .slick-arrow.next {
+      left: unset;
+      right: -50px;
+  }
+  .js-slick-blog .slick-dots {
+      list-style: none;
+      position: absolute;
+      bottom: 35px;
+      width: 100%;
+      left: 0;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+
+  .js-slick-blog .slick-dots button {
+      display: none;
+  }
+
+  .js-slick-blog .slick-dots li {
+      width: 8px;
+      height: 8px;
+      background: transparent;
+      border: 1px solid #fff;
+      border-radius: 100%;
+      margin: 0 3px;
+  }
+
+  .js-slick-blog .slick-dots li.slick-active {
+      background: #fff;
+  }
+  .js-slick-blog .blog__article-heading {
+      margin: 0;
+  }
+
+  .js-slick-blog .blog__article-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 40px;
+      background: linear-gradient(180deg,transparent,rgba(0,0,0,.5) 82.81%);
+  }
+
+  article.blog__article {
+      position: relative;
+  }
+
+  .js-slick-blog .blog__article-heading a {
+      color: #fff;
+  }
+  .js-slick-blog .slick-slide {
+      padding: 0;
+  }
+  .blog__articles.top__three-blog {
+      margin: 0 0 40px 0;
+  }
+  .blog-filter {
+      margin-bottom: 25px;
+  }
+  .head-blog {
+      text-align: center;
+      font-size: 18px;
+  }
+
+/*   .head-blog h1 {
+      font-size: 35px;
+  } */
+  .responsive-image__wrapper img {
+      transition: .8s all !important;
+  }
+
+  .responsive-image__wrapper img:hover {
+      transform: scale(1.05);
+  }
+  
+  @media (max-width: 767px) {
+    .head-blog {
+        margin: 20px 0;
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    .head-blog h1 {
+        font-size: 30px;
+    }
+
+    .js-slick-blog .slick-arrow {
+        display: none !important;
+    }
+
+    .blog-filter ul li {
+        margin-right: 20px;
+    }
+
+    .blog-filter ul li a {
+        font-size: 15px;
+        padding: 10px 0;
+    }
+
+    .blog-filter ul {
+        padding: 10px 0;
+    }
+
+    .blog__articles.top__three-blog {
+        margin-bottom: 25px;
+    }
+
+    .list-art .w-third-l {
+        flex: 0 0 100%;
+        margin-bottom: 20px;
+    }
+
+    .list-art .blog__article-content a {
+        font-size: 16px;
+    }
+    .js-slick-blog .slick-dots {
+        bottom: 55px;
+    }
+    .js-slick-blog .slick-dots li {
+        border: 1px solid #000000;
+    }
+
+    .js-slick-blog .slick-dots li.slick-active {
+        background: #000000;
+    }
+
+    .js-slick-blog .slick-dots {
+        position: relative;
+        padding: 10px 0;
+        box-sizing: border-box;
+      	bottom: 0;
+    }
+    .js-slick-blog .blog__article-content {
+        padding: 15px;
+    }
+
+    .js-slick-blog .blog__article-heading a {
+        font-size: 17px;
+    }
+
+  }
+  
+  @media (max-width: 1024px) and (min-width: 768px) {
+    .js-slick-blog {
+        padding: 0 50px;
+    }
+    .js-slick-blog .slick-arrow {
+        left: 0;
+    }
+
+    .js-slick-blog .slick-arrow.next {
+        right: 0;
+    }
+  }
+  
+  @media (max-width: 1300px) and (min-width: 1023px) {
+    .js-slick-blog {
+        padding: 0 50px;
+    }
+    .js-slick-blog .slick-arrow {
+        left: 0;
+    }
+
+    .js-slick-blog .slick-arrow.next {
+        right: 0;
+    }
+  }
+  
+  .list--item .article__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+  }
+  .list--item .article__footer p{
+    margin: 0;
+        font-size: 14px;
+  }
+  .list--item .article__footer a {
+    text-decoration: inherit;
+    text-transform: uppercase;
+    font-size: 14px;
+  }
+  
+  
+</style>
+

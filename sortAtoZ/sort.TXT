@@ -1,0 +1,45 @@
+{% if section.settings.collection_sort %}
+            <div class="filter_wrap hidden-phone">
+              <dl class="item-sort-link">
+                <dt class="item-sort-link__item"><b>並び替え:</b></dt>
+                <dd class="item-sort-link__item">
+                  <a
+                     {% if collection.sort_by == 'best-selling' %}
+                     class="active"
+                     {% endif %}
+                     href="{{ request.path  }}?sort_by=best-selling"
+                     >人気順</a></dd>
+                <dd class="item-sort-link__item">
+                  <a
+                     {% if collection.sort_by == 'created-descending' %}
+                     class="active"
+                     {% endif %}
+                     href="{{ request.path  }}?sort_by=created-descending"
+                     >新着順</a></dd>
+                <dd class="item-sort-link__item">
+                  <a
+                     {% if collection.sort_by == 'price-ascending' %}
+                     class="active"
+                     {% endif %}
+                     href="{{ request.path  }}?sort_by=price-ascending"
+                     >価格が安い順</a></dd>
+                <dd class="item-sort-link__item">
+                  <a
+                     {% if collection.sort_by == 'price-descending' %}
+                     class="active"
+                     {% endif %}
+                     href="{{ request.path  }}?sort_by=price-descending"
+                     >価格が高い順</a></dd>
+              </dl>
+            </div>
+            <div class="filter_wrap visible-phone">
+              <label for="sort-by" class="inline">{{ 'collections.sorting.title' | t }}: </label>
+              <select class="sort_by" id="sort-by" data-default-sort="{{ collection.sort_by | default: ''  }}">
+                <option value="">選択してください</option>
+                <option value="best-selling">人気順</option>
+                <option value="created-descending">新着順</option>
+                <option value="price-ascending">価格が安い順</option>
+                <option value="price-descending">価格が高い順</option>
+              </select>
+            </div>
+            {% endif %}

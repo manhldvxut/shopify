@@ -1,0 +1,7 @@
+<div class="category-title brand-top-title">
+        {% assign title_splited = collection.title | split: "/" %}
+        <h2 class="item-list-category">
+          <b>{{ title_splited[0] | escape }}</b>
+          <br>{{ title_splited[1] | escape }}
+        </h2>
+      </div>

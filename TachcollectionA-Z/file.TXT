@@ -1,0 +1,40 @@
+
+<ul class="alphalbe">
+
+  {% for collection-item in collections %}
+  {% assign collectionName = collection-item.title %}
+
+  {% assign alphabel =  collection-item.title | slice: 0  | upcase  %}
+  
+    <li id={{alphabel}}>
+      <div >{{ alphabel }}</div>
+      {% for name in collectionName %}
+      <div class="pushTxt">
+        <p>{{name}}</p>
+      </div>
+        
+      {% endfor %}
+    </li>
+
+
+  {% endfor %}
+
+</ul>
+
+<script>
+	$('.alphalbe [id]').each(function(){
+		var ids = $('[id="'+this.id+'"]');
+		if(ids.length>1 && ids[0]==this){
+		  var textID = $(ids).find('p')
+		  var pushItem = $(this).find('.pushTxt')
+		  pushItem.html(textID)
+		}
+		
+	  });
+	  
+	  //remove id trung nhau
+	$('.alphalbe [id]').each(function () {
+		$('[id="' + this.id + '"]:gt(0)').remove();
+	});
+	
+</script>

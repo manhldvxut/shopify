@@ -29,12 +29,11 @@
 		  var pushItem = $(this).find('.pushTxt')
 		  pushItem.html(textID)
 		}
+
+	  	//remove id trung nhau
+		$('[id="' + this.id + '"]:gt(0)').remove();
 		
 	  });
 	  
-	  //remove id trung nhau
-	$('.alphalbe [id]').each(function () {
-		$('[id="' + this.id + '"]:gt(0)').remove();
-	});
 	
 </script>

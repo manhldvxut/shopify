@@ -13,7 +13,7 @@
       </svg>
     </div>
     <div class="filter-values">
-      <ul>
+      <ul> 
         {%- for value in filter.values -%}
         <li class="{% if value.active %}active{% endif %} {% if value.count == 0 and value.active == false %} disabled{% endif %}"
             data-value="{{ value.value }}"

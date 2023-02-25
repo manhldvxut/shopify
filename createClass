@@ -1,0 +1,18 @@
+%- liquid
+    capture template_name
+      if template == 'index'
+        echo 'index'
+      elsif template contains 'product'
+        echo 'product'
+      elsif template contains 'collection'
+        echo 'collection'
+      elsif template contains 'customers'
+        echo 'customers'
+      else
+        echo 'page'
+      endif
+    endcapture
+  -%}
+  
+  --> show
+  {{ template_name }}

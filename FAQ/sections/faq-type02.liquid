@@ -1,0 +1,94 @@
+
+<div class="faq">
+  <div class="faq__body">
+    <h2 id="{{section.settings.heading | remove:" "}}">{{section.settings.heading}}</h2>
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'FAQ' -%}
+          <accordion-tab {{ block.shopify_attributes }}>
+            <details>
+              <summary>
+                <h3 class="faq__title">{{ block.settings.title | escape }}</h3>
+              </summary>
+              <div class="faq__content"> {{ block.settings.text }}</div>
+            </details>
+          </accordion-tab>
+
+        {%- when 'liquid' -%}
+          <accordion-tab {{ block.shopify_attributes }}>
+            <details>
+              <summary>
+                <h3>{{ block.settings.title | escape }}</h3>
+              </summary>
+              <div class="faq__content"> {{ block.settings.text }}</div>
+            </details>
+          </accordion-tab>
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "FAQ",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "FAQ title"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "FAQ",
+      "name": "FAQ Block question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "default": "Frequently asked question",
+          "label": "FAQ Block title"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "FAQ Block answer",
+          "default": "<p>Use this text to answer questions in as much detail as possible for your customers.</p>"
+        }
+      ]
+    },
+    {
+      "type": "liquid",
+      "name": "HTML setting",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "default": "Frequently asked question",
+          "label": "FAQ Block title"
+        },
+        {
+          "type": "liquid",
+          "id": "Liquid",
+          "label": "HTML setting"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ",
+      "blocks": [
+        {
+          "type": "FAQ"
+        },
+        {
+          "type": "liquid"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

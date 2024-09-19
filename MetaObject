@@ -1,1 +1,36 @@
 
+
+List metaobject
+<script>console.log({{ shop.metaobjects.Variant_color.values | json }});</script>
+<ul>
+
+{% for influencer in product.metafields.custom.variant_metaobject.value %}
+  <li>
+      <div class="card">
+        <div class="colors">
+          {% assign colors = influencer.variant_title.value %}
+          {% assign urls = influencer.variant_url.value %}
+          {% assign gallery = influencer.variant_image.value %}
+          
+          {% for color_title in colors %}
+            {% assign Forloop_index = forloop.index | minus: 1 %}
+            {% assign Forloop_non_minus = forloop.index %}
+            <p>
+              <a href="{{ urls[Forloop_index ] }}">
+                {{ color_title }}<br>
+
+                {% for images in gallery %}
+                  {% if Forloop_non_minus == forloop.index %}
+                    <img src="{{ images | image_url: width: 100 }}">
+                  {% endif %}
+                  
+                {% endfor %}
+              </a>
+            </p>
+          {% endfor %}
+        </div>
+      </div>
+    </li>
+{% endfor %}
+
+</ul>

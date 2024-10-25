@@ -1,0 +1,7 @@
+{% assign text = "ブラック/ロイヤルブルー" %}
+
+{% if text contains "/" %}
+   <p>The string contains a slash (/).</p>
+{% else %}
+   <p>The string does not contain a slash (/).</p>
+{% endif %}
